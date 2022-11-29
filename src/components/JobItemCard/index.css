@@ -1,0 +1,19 @@
+.jobItemParent {
+  background-color: black;
+  background-image: none;
+}
+.jobImage {
+  height: 60px;
+  width: 60px;
+}
+.paraDesc {
+  color: #d3d3d3;
+}
+.linkStyle,
+.linkStyle:hover {
+  all: unset;
+  cursor: pointer;
+}
+.card {
+  cursor: pointer;
+}

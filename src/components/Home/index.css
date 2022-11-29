@@ -1,0 +1,11 @@
+.homeScreenSection {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/home-lg-bg.png');
+  background-size: cover;
+  flex-grow: 1;
+}
+.introSection {
+  height: 100%;
+}
+.mainHead {
+  font-size: 55px;
+}

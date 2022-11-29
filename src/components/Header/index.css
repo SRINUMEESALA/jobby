@@ -1,0 +1,16 @@
+.navCon {
+  width: 90%;
+}
+.websiteLogo {
+  height: 8vh;
+}
+.navParentCon {
+  background-color: black;
+}
+.linkComp {
+  all: unset;
+}
+.linkComp:hover {
+  all: unset;
+  cursor: pointer;
+}

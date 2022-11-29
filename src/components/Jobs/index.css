@@ -1,0 +1,18 @@
+.jobsInfoCon {
+  flex-grow: 1;
+  width: 90%;
+}
+.card {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/profile-bg.png');
+  background-size: cover;
+  border-radius: 15px;
+}
+.profilePicCon {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+}
+.typeItems {
+  font-size: 19px;
+  color: #b8b8b8;
+}
