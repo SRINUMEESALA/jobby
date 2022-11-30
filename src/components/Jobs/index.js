@@ -19,12 +19,19 @@ export const renderHoriz = () => (
   </div>
 )
 
+const apiConstants = {
+  success: 'success',
+  fail: 'fail',
+  load: 'load',
+}
+
 class Jobs extends Component {
   state = {
     employmentTypesSelected: [],
     salary: '',
     searchInput: '',
     jobItems: [],
+    apiStatus: 'load',
   }
 
   componentDidMount() {
@@ -48,20 +55,24 @@ class Jobs extends Component {
     // const url = 'https://apis.ccbp.in/jobs'
 
     const response = await fetch(url, options)
-    let data = await response.json()
-    data = data.jobs
-    data = data.map(obj => ({
-      companyLogoUrl: obj.company_logo_url,
-      employmentType: obj.employment_type,
-      jobDescription: obj.job_description,
-      id: obj.id,
-      location: obj.location,
-      rating: obj.rating,
-      title: obj.title,
-      packagePerAnnum: obj.package_per_annum,
-    }))
+    if (response.ok) {
+      let data = await response.json()
+      data = data.jobs
+      data = data.map(obj => ({
+        companyLogoUrl: obj.company_logo_url,
+        employmentType: obj.employment_type,
+        jobDescription: obj.job_description,
+        id: obj.id,
+        location: obj.location,
+        rating: obj.rating,
+        title: obj.title,
+        packagePerAnnum: obj.package_per_annum,
+      }))
 
-    this.setState({jobItems: data})
+      this.setState({jobItems: data, apiStatus: apiConstants.success})
+    } else {
+      this.setState({apiStatus: apiConstants.fail})
+    }
   }
 
   searching = event => {
@@ -164,8 +175,32 @@ class Jobs extends Component {
     </div>
   )
 
+  renderFailureView = () => (
+    <div className="mt-5 w-100 d-flex justify-content-center">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+        alt="no jobs"
+        className="w-50 h-100"
+      />
+    </div>
+  )
+
+  decideWhatToShow = () => {
+    const {apiStatus, jobItems} = this.state
+    switch (apiStatus) {
+      case apiConstants.success:
+        return <AllJobsList jobItems={jobItems} key={uuidv4()} />
+
+      case apiConstants.fail:
+        return this.renderFailureView()
+
+      default:
+        return this.renderLoadingView()
+    }
+  }
+
   jobsDisplay = () => {
-    const {searchInput, jobItems} = this.state
+    const {searchInput} = this.state
     return (
       <div className="jobsContainer col-md-8 pt-3 d-flex flex-column">
         <div className="input-group mb-3 w-50 align-self-end">
@@ -187,11 +222,12 @@ class Jobs extends Component {
             </button>
           </div>
         </div>
-        {jobItems.length === 0 ? (
+        {this.decideWhatToShow()}
+        {/* {jobItems.length === 0 ? (
           this.renderLoadingView()
         ) : (
           <AllJobsList jobItems={jobItems} key={uuidv4()} />
-        )}
+        )} */}
       </div>
     )
   }

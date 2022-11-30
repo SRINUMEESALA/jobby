@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {Switch, Route} from 'react-router-dom'
 import Home from './components/Home'
 import NotFound from './components/NotFound'
 import Login from './components/Login'
@@ -49,15 +49,13 @@ export const salaryRangesList = [
 // Replace your code here
 const App = () => (
   <>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <ProtectedRoute exact path="/" component={Home} />
-        <ProtectedRoute exact path="/jobs" component={Jobs} />
-        <ProtectedRoute exact path="/jobs/:id" component={JobItemDetails} />
-        <Route component={NotFound} />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route exact path="/login" component={Login} />
+      <ProtectedRoute exact path="/" component={Home} />
+      <ProtectedRoute exact path="/jobs" component={Jobs} />
+      <ProtectedRoute exact path="/jobs/:id" component={JobItemDetails} />
+      <Route component={NotFound} />
+    </Switch>
   </>
 )
 
