@@ -20,6 +20,7 @@ class Profile extends Component {
   }
 
   getProfileDetails = async () => {
+    this.setState({profileApiStatus: apiStatusConstants.loading})
     try {
       const options = {
         method: 'GET',

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {BiSearch} from 'react-icons/bi'
@@ -8,22 +7,52 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import {v4 as uuidv4} from 'uuid'
 import Header from '../Header'
 import Profile from '../Profile'
-
-import {employmentTypesList, salaryRangesList} from '../../App'
-import './index.css'
 import AllJobsList from '../AllJobsList'
-
-export const renderHoriz = () => (
-  <div>
-    <hr className="bg-light" />
-  </div>
-)
+import './index.css'
 
 const apiConstants = {
   success: 'success',
   fail: 'fail',
   load: 'load',
 }
+
+const employmentTypesList = [
+  {
+    label: 'Full Time',
+    employmentTypeId: 'FULLTIME',
+  },
+  {
+    label: 'Part Time',
+    employmentTypeId: 'PARTTIME',
+  },
+  {
+    label: 'Freelance',
+    employmentTypeId: 'FREELANCE',
+  },
+  {
+    label: 'Internship',
+    employmentTypeId: 'INTERNSHIP',
+  },
+]
+
+const salaryRangesList = [
+  {
+    salaryRangeId: '1000000',
+    label: '10 LPA and above',
+  },
+  {
+    salaryRangeId: '2000000',
+    label: '20 LPA and above',
+  },
+  {
+    salaryRangeId: '3000000',
+    label: '30 LPA and above',
+  },
+  {
+    salaryRangeId: '4000000',
+    label: '40 LPA and above',
+  },
+]
 
 class Jobs extends Component {
   state = {
@@ -43,6 +72,7 @@ class Jobs extends Component {
   }
 
   getAllJobs = async () => {
+    this.setState({apiStatus: apiConstants.load})
     const options = {
       method: 'GET',
       headers: {
@@ -51,29 +81,39 @@ class Jobs extends Component {
     }
     const {employmentTypesSelected, salary, searchInput} = this.state
     const joinedList = employmentTypesSelected.join(',')
-    const url = `https://apis.ccbp.in/jobs?employment_type=${joinedList}&minimum_package=${salary}&search=${searchInput}`
-    // const url = 'https://apis.ccbp.in/jobs'
+    try {
+      const url = `https://apis.ccbp.in/jobs?employment_type=${joinedList}&minimum_package=${salary}&search=${searchInput}`
+      // const url = 'https://apis.ccbp.in/jobs'
 
-    const response = await fetch(url, options)
-    if (response.ok) {
-      let data = await response.json()
-      data = data.jobs
-      data = data.map(obj => ({
-        companyLogoUrl: obj.company_logo_url,
-        employmentType: obj.employment_type,
-        jobDescription: obj.job_description,
-        id: obj.id,
-        location: obj.location,
-        rating: obj.rating,
-        title: obj.title,
-        packagePerAnnum: obj.package_per_annum,
-      }))
-
-      this.setState({jobItems: data, apiStatus: apiConstants.success})
-    } else {
+      const response = await fetch(url, options)
+      if (response.ok) {
+        let data = await response.json()
+        data = data.jobs
+        data = data.map(obj => ({
+          companyLogoUrl: obj.company_logo_url,
+          employmentType: obj.employment_type,
+          jobDescription: obj.job_description,
+          id: obj.id,
+          location: obj.location,
+          rating: obj.rating,
+          title: obj.title,
+          packagePerAnnum: obj.package_per_annum,
+        }))
+        console.log(response.url)
+        this.setState({jobItems: data, apiStatus: apiConstants.success})
+      } else {
+        this.setState({apiStatus: apiConstants.fail})
+      }
+    } catch (err) {
       this.setState({apiStatus: apiConstants.fail})
     }
   }
+
+  renderHoriz = () => (
+    <div>
+      <hr className="bg-light" />
+    </div>
+  )
 
   searching = event => {
     this.setState({searchInput: event.target.value}, this.callGetAllJobs)
@@ -157,11 +197,10 @@ class Jobs extends Component {
 
   renderFilterSection = () => (
     <div className="">
-      {renderHoriz()}
+      {this.renderHoriz()}
       {this.renderEmploymentType('Type of Employment')}
-      {renderHoriz()}
+      {this.renderHoriz()}
       {this.renderSalary('Salary Range')}
-      {renderHoriz()}
     </div>
   )
 
@@ -176,12 +215,23 @@ class Jobs extends Component {
   )
 
   renderFailureView = () => (
-    <div className="mt-5 w-100 d-flex justify-content-center">
-      <img
-        src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
-        alt="no jobs"
-        className="w-50 h-100"
-      />
+    <div className="text-white text-center">
+      <div className="mt-5 w-100 d-flex justify-content-center text-white ">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+          alt="failure view"
+          className="w-50 h-100"
+        />
+      </div>
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for.</p>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={this.getAllJobs}
+      >
+        Retry
+      </button>
     </div>
   )
 

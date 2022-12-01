@@ -1,6 +1,6 @@
 .jobItemParent {
   background-color: black;
-  background-image: none;
+  background-image: none !important;
 }
 .jobImage {
   height: 60px;

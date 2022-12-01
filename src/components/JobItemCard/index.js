@@ -2,12 +2,15 @@ import {AiFillStar} from 'react-icons/ai'
 import {MdLocationOn} from 'react-icons/md'
 import {BsFillBagFill} from 'react-icons/bs'
 import {Link} from 'react-router-dom'
-// eslint-disable-next-line import/no-cycle
-import {renderHoriz} from '../Jobs/index'
 
 import './index.css'
 
 const JobItemCard = props => {
+  const renderHoriz = () => (
+    <div>
+      <hr className="bg-light" />
+    </div>
+  )
   const {eachJob} = props
   const {
     companyLogoUrl,
@@ -19,7 +22,7 @@ const JobItemCard = props => {
     packagePerAnnum,
   } = eachJob
   return (
-    <Link to={`/jobs/${id}`} className="linkStyle">
+    <Link to={`/jobs/${id}`} className="linkStyle bg-dark">
       <div className="card jobItemParent text-white p-3 mb-3">
         <div className="conHead d-flex">
           <div className="">

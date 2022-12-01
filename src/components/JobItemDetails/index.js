@@ -9,8 +9,6 @@ import {BsFillBagFill} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-// eslint-disable-next-line import/no-cycle
-import {renderHoriz} from '../Jobs/index'
 import './index.css'
 import Header from '../Header'
 
@@ -27,54 +25,63 @@ class JobItemDetails extends Component {
     this.getJobDet()
   }
 
+  renderHoriz = () => (
+    <div>
+      <hr className="bg-light" />
+    </div>
+  )
+
   getJobDet = async () => {
     const {match} = this.props
     const {params} = match
     const {id} = params
-
+    this.setState({apiStatus: apiStatusConstants.loading})
     const options = {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${Cookies.get('jwt_token')}`,
       },
     }
+    try {
+      const response = await fetch(`https://apis.ccbp.in/jobs/${id}`, options)
+      if (response.ok) {
+        const data = await response.json()
 
-    const response = await fetch(`https://apis.ccbp.in/jobs/${id}`, options)
-    if (response.ok) {
-      const data = await response.json()
+        let jobDetails = data.job_details
+        jobDetails = {
+          companyLogoUrl: jobDetails.company_logo_url,
+          companyWebsiteUrl: jobDetails.company_website_url,
+          employmentType: jobDetails.employment_type,
+          jobDescription: jobDetails.job_description,
+          lifeAtCompany: jobDetails.life_at_company,
+          skills: jobDetails.skills,
+          id: jobDetails.id,
+          location: jobDetails.location,
+          rating: jobDetails.rating,
+          title: jobDetails.title,
+          packagePerAnnum: jobDetails.package_per_annum,
+        }
 
-      let jobDetails = data.job_details
-      jobDetails = {
-        companyLogoUrl: jobDetails.company_logo_url,
-        companyWebsiteUrl: jobDetails.company_website_url,
-        employmentType: jobDetails.employment_type,
-        jobDescription: jobDetails.job_description,
-        lifeAtCompany: jobDetails.life_at_company,
-        skills: jobDetails.skills,
-        id: jobDetails.id,
-        location: jobDetails.location,
-        rating: jobDetails.rating,
-        title: jobDetails.title,
-        packagePerAnnum: jobDetails.package_per_annum,
+        let similarJobs = data.similar_jobs
+        similarJobs = similarJobs.map(obj => ({
+          companyLogoUrl: obj.company_logo_url,
+          employmentType: obj.employment_type,
+          jobDescription: obj.job_description,
+          id: obj.id,
+          location: obj.location,
+          rating: obj.rating,
+          title: obj.title,
+        }))
+
+        this.setState({
+          similarJobs,
+          jobDetails,
+          apiStatus: apiStatusConstants.success,
+        })
+      } else {
+        this.setState({apiStatus: apiStatusConstants.failed})
       }
-
-      let similarJobs = data.similar_jobs
-      similarJobs = similarJobs.map(obj => ({
-        companyLogoUrl: obj.company_logo_url,
-        employmentType: obj.employment_type,
-        jobDescription: obj.job_description,
-        id: obj.id,
-        location: obj.location,
-        rating: obj.rating,
-        title: obj.title,
-      }))
-
-      this.setState({
-        similarJobs,
-        jobDetails,
-        apiStatus: apiStatusConstants.success,
-      })
-    } else {
+    } catch (err) {
       this.setState({apiStatus: apiStatusConstants.failed})
     }
   }
@@ -126,7 +133,7 @@ class JobItemDetails extends Component {
           </div>
           <p className="h4 m-0">{packagePerAnnum}</p>
         </div>
-        {renderHoriz()}
+        {this.renderHoriz()}
         <h1 className="h5">Description</h1>
         <p className="paraDesc">{jobDescription}</p>
         <h1 className="h5">Skills</h1>
@@ -198,7 +205,7 @@ class JobItemDetails extends Component {
                     </div>
                     <h1 className="h4 m-0">{obj.title}</h1>
                   </div>
-                  {renderHoriz()}
+                  {this.renderHoriz()}
                   <h1 className="h5">Description</h1>
                   <p className="paraDesc">{obj.jobDescription}</p>
                 </div>
