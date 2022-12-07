@@ -20,6 +20,7 @@ const JobItemCard = props => {
     location,
     rating,
     packagePerAnnum,
+    title,
   } = eachJob
   return (
     <Link to={`/jobs/${id}`} className="linkStyle bg-dark">
@@ -33,7 +34,7 @@ const JobItemCard = props => {
             />
           </div>
           <div className="d-flex flex-column">
-            <p className="h3 ml-2">{employmentType}</p>
+            <p className="h3 ml-2">{title}</p>
             <div className="d-flex">
               <AiFillStar className="h4 text-warning mr-1 ml-2" />
               <p className="">{rating}</p>
