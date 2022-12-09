@@ -203,7 +203,7 @@ class JobItemDetails extends Component {
                         <p className="m-0">{obj.employmentType}</p>
                       </div>
                     </div>
-                    <h1 className="h4 m-0">{obj.title}</h1>
+                    {/* <h1 className="h4 m-0">{obj.title}</h1> */}
                   </div>
                   {this.renderHoriz()}
                   <h1 className="h5">Description</h1>

@@ -53,26 +53,16 @@ class Login extends Component {
             <label htmlFor="USERNAME">USERNAME</label>
             <input
               type="text"
-              id="USERNAME"
-              value={username}
-              onChange={this.inputChanging}
-              name="username"
-              placeholder="Username"
-            />
-            {/* <label htmlFor="USERNAME">USERNAME</label>
-            <input
-              type="text"
               className="form-control"
               value={username}
               onChange={this.inputChanging}
               id="USERNAME"
               name="username"
-            /> */}
-            {/* <small id="UsernameHelp" className="form-text text-muted">
-              We&apos;ll never share your email with anyone else.
-            </small> */}
+            />
 
-            <label htmlFor="PASSWORD">PASSWORD</label>
+            <label htmlFor="PASSWORD" className="mt-2">
+              PASSWORD
+            </label>
             <input
               type="password"
               className="form-control"
@@ -81,9 +71,9 @@ class Login extends Component {
               value={password}
               name="password"
             />
-            {/* <small id="passwordHelp" className="form-text text-muted">
+            <small id="passwordHelp" className="form-text text-muted">
               Keep strong password!
-            </small> */}
+            </small>
 
             <button type="submit" className="btn btn-primary btn-block mt-2">
               Login

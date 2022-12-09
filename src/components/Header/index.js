@@ -32,17 +32,13 @@ const Header = props => {
               Jobs
             </Link>
           </li>
-          <li>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={loggingOut}
-            >
-              Logout
-            </button>
-          </li>
+
           {/* place button here */}
         </ul>
+
+        <button type="button" className="btn btn-primary" onClick={loggingOut}>
+          Logout
+        </button>
       </div>
     </nav>
   )
